@@ -1,0 +1,13 @@
+{
+  "length_std": 16.38871086296906,
+  "avg_length": 23.1875,
+  "cv": 0.08366896388737984,
+  "str_em": 41.354166666666664,
+  "str_hit": 12.5,
+  "std_em": 0.2935190433676228,
+  "citation_recall": 0.0,
+  "citation_precision": 0.0,
+  "recall_std": 0.0,
+  "precision_std": 0.0,
+  "times_not_used_aliice": 9
+}

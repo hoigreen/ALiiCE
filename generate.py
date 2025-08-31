@@ -9,7 +9,39 @@ import logging
 import transformers
 from tqdm import tqdm
 
-logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+# Suppress noisy NumPy-related warnings triggered indirectly by torch import
+warnings.filterwarnings(
+    "ignore",
+    category=UserWarning,
+    message="Failed to initialize NumPy: _ARRAY_API not found"
+)
+warnings.filterwarnings("ignore", category=UserWarning, module=r"numpy(\.|$)")
+
+
+# Clear any proxy environment variables that might cause issues
+proxy_vars = ['HTTP_PROXY', 'HTTPS_PROXY', 'http_proxy',
+              'https_proxy', 'ALL_PROXY', 'all_proxy']
+for var in proxy_vars:
+    if var in os.environ:
+        del os.environ[var]
+
+# Mitigate CUDA memory fragmentation
+os.environ.setdefault('PYTORCH_CUDA_ALLOC_CONF', 'expandable_segments:True')
+
+# Load API keys from environment variables or .env file
+# Make sure to set these in your environment or create a .env file
+# export OPENAI_API_KEY="your-api-key-here"
+# export OPEN_API_URL="https://api.openai.com/v1"
+
+# Check if API key is set in environment
+if not os.environ.get('OPENAI_API_KEY'):
+    raise ValueError("OPENAI_API_KEY environment variable not set. Please set it before running this script.")
+
+# Set default API URL if not provided
+if not os.environ.get('OPEN_API_URL'):
+    os.environ["OPEN_API_URL"] = "https://api.openai.com/v1"
+logging.basicConfig(level=logging.INFO,
+                    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 
 model_list = [
     'llama-3-8b', 

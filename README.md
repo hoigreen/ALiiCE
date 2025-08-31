@@ -1,4 +1,5 @@
 # ALiiCE
+
 This is the repository of **ALiiCE** (**A**utomatic **L**LM's Pos**i**tional F**i**ne-grained **C**itation **E**valuation), from the paper: [ALiiCE: Evaluating Positional Fine-grained Citation Generation.](https://arxiv.org/abs/2406.13375)
 
 ## News
@@ -6,38 +7,45 @@ This is the repository of **ALiiCE** (**A**utomatic **L**LM's Pos**i**tional F**
 - Our paper was accepted by NAACL 2025 Main Conference!
 - The paper poster has been uploaded.
 
-
 ## Introduction
+
 ALiiCE focuses on the task of positional fine-grained citation text generation, which citation marks can appear anywhere within sentences. Our framework first parses the sentence claim into atomic claims via dependency analysis. We implement three novel metrics, including positional fine-grained citation recall and precision, and coefficient of variation of citation positions. Our code can be a effective method to evaluate performance for the task of positional fine-grained citation text generation.
 
-
-
 The function of each main file or folder is as follows:
+
 - data/: ASQA and ELI5 datasets
 - prompts/: prompts used in LLM generation
 - eval.py: evaluate the output of LLM generation
 - generate.py: generate output file of LLM generation
 - myparser.py: the implementation of ALiiCE parsing algorithm
 
-
 ## Installation
+
 All requirements are displayed at [requirements.txt](requirements.txt) and you can setup the environment by running the following command of conda:
+
 ```bash
 conda env create -f requirements.yml
 ```
+
 the main packages we used are: `python>=3.10`, `torch==2.2.2+cu118`, `transformers`, `spacy`, `pandas`, `nltk`, `rouge_score`, `openai`, `graphviz`.
 
 Then, run the following command to download the English models of `spacy`:
+
 ```bash
 python -m spacy download en_core_web_sm
 ```
 
 ## Dataset
+
 You can refer to [./data/README.md](data/README.md) to obtain the datasets required for generation and evaluation.
 
-
 ## Generation
-We provide two types of LLM generation implementations, which are OpenAI's LLMs and llama-3 series.
+
+We provide three types of LLM generation implementations:
+
+- **OpenAI's LLMs** (GPT series)
+- **Google's Gemini models** (using the latest Google GenAI SDK)
+- **Local Llama-3 models**
 
 ```bash
 python generate.py --data_path ./data/data.json \
@@ -46,7 +54,9 @@ python generate.py --data_path ./data/data.json \
     --psg_num 5 \
     --model_name llama-3-8b
 ```
+
 the explanation of every parameter is as follows:
+
 - --data_path: the path of dataset file
 - --prompt_config: the prompt file used for generation
 - --output_path: the path of file to store the output
@@ -55,10 +65,10 @@ the explanation of every parameter is as follows:
 - --use_sum: use this when the passage's format is summary
 - --use_snippet: use this when the passage's format is snippet
 
-
-
 ## Evaluation
+
 After the generation, you can evaluate the performance of your model's output by our code.For example, if you want to evaluate the output on ELI5 using ALiiCE, you can run the following command:
+
 ```bash
 python eval.py --data_path ./outputs/output.json \
     --benchmark aliice \
@@ -71,7 +81,9 @@ python eval.py --data_path ./outputs/output.json \
     --cv \
     --psg_num 5 \
 ```
+
 the explanation of every parameter is as follows:
+
 - --data_path: the path of output file to be evaluated
 - --benchmark: the evaluation method, which has two choices: ALCE and ALiiCE
 - --dataset: the used dataset, which has two choices: ASQA and ELI5
@@ -85,11 +97,9 @@ the explanation of every parameter is as follows:
 - --use_sum: use this when the passage's format is summary
 - --use_snippet: use this when the passage's format is snippet
 
-
-
 ## Acknowledgement
-We would thank for the [ALCE](https://github.com/princeton-nlp/ALCE) repository for providing guidance or inspiration.
 
+We would thank for the [ALCE](https://github.com/princeton-nlp/ALCE) repository for providing guidance or inspiration.
 
 ## Citation
 
@@ -106,4 +116,3 @@ If ALiiCE is useful to you, please cite the following paper in your work:
       url={https://arxiv.org/abs/2406.13375}, 
 }
 ```
-

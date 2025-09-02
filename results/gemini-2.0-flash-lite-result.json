@@ -5,9 +5,9 @@
   "str_em": 41.354166666666664,
   "str_hit": 12.5,
   "std_em": 0.2935190433676228,
-  "citation_recall": 0.0,
-  "citation_precision": 0.0,
-  "recall_std": 0.0,
-  "precision_std": 0.0,
+  "citation_recall": 79.16666666666666,
+  "citation_precision": 76.19047619047619,
+  "recall_std": 0.3847927704498568,
+  "precision_std": 0.3842860093230708,
   "times_not_used_aliice": 9
 }

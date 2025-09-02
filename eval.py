@@ -38,7 +38,6 @@ def sentence_spliter(text):
     
     return sentences
 
-
 def run_nli(passage, claim, max_length=512):
     ''' run nli model to check whether passage can entail claim
     Copied from https://github.com/princeton-nlp/ALCE/blob/main/eval.py
@@ -46,19 +45,21 @@ def run_nli(passage, claim, max_length=512):
 
     global nli_tokenizer, nli_model
 
-    input_text = "premise: {} hypothesis: {}".format(passage, claim)
-    input_ids = nli_tokenizer(input_text, return_tensors="pt").input_ids.to(nli_model.device)
-
-    if len(input_ids) > 512:
-        input_ids = input_ids[:512]
+    # Prompt cho Flan-T5
+    input_text = f"Premise: {passage}\nHypothesis: {claim}\nQuestion: Does the premise entail the hypothesis? Answer yes or no."
+    input_ids = nli_tokenizer(input_text, return_tensors="pt",
+                              truncation=True, max_length=max_length).input_ids.to(nli_model.device)
 
     with torch.no_grad():
         outputs = nli_model.generate(input_ids, max_new_tokens=10)
-    
-    result = nli_tokenizer.decode(outputs[0], skip_special_tokens=True)
-    inference = 1 if result == "1" else 0
 
-    return inference
+    result = nli_tokenizer.decode(outputs[0], skip_special_tokens=True).lower().strip()
+
+    # Map output yes/no sang entail = 1 / 0
+    if result.startswith("yes") or result == "true" or result == "1":
+        return 1
+    else:
+        return 0
 
 
 def calculate_correctness_asqa(data):
